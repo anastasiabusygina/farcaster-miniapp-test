@@ -1,13 +1,14 @@
 "use client";
 
-import { BetSwirlSDKProvider, type TokenWithImage } from "@betswirl/ui-react";
-import { type AppConfig } from "@coinbase/onchainkit";
 import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
+import { type AppConfig } from '@coinbase/onchainkit'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
-import { type Hex, http } from "viem";
-import { createConfig, WagmiProvider } from "wagmi";
+import { http, type Hex } from "viem";
+import { WagmiProvider, createConfig } from "wagmi";
 import { base } from "wagmi/chains";
+import { BetSwirlSDKProvider, type TokenWithImage, TokenProvider, BalanceProvider } from "@betswirl/ui-react";
+import { polygon } from "viem/chains";
 
 const DEGEN_TOKEN: TokenWithImage = {
   address: "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed" as Hex,
@@ -16,12 +17,16 @@ const DEGEN_TOKEN: TokenWithImage = {
   image: "https://www.betswirl.com/img/tokens/DEGEN.svg",
 };
 
+const baseRpcUrl = "https://mainnet.base.org"
+const polygonRpcUrl = "https://polygon-rpc.com"
+
 const config = createConfig({
-  chains: [base],
+  chains: [base, polygon],
   transports: {
-    [base.id]: http(),
+    [base.id]: http(baseRpcUrl),
+    [polygon.id]: http(polygonRpcUrl),
   },
-  ssr: true,
+  ssr: false,
 });
 
 const onChainKitConfig: AppConfig = {
@@ -41,8 +46,16 @@ export function Providers(props: { children: ReactNode }) {
           chain={base}
           config={onChainKitConfig}
         >
-          <BetSwirlSDKProvider initialChainId={base.id} bankrollToken={DEGEN_TOKEN}>
-            {props.children}
+          <BetSwirlSDKProvider 
+            initialChainId={base.id} 
+            bankrollToken={DEGEN_TOKEN} 
+            supportedChains={[base.id, polygon.id]}
+          >
+            <TokenProvider>
+              <BalanceProvider>
+                {props.children}
+              </BalanceProvider>
+            </TokenProvider>
           </BetSwirlSDKProvider>
         </MiniKitProvider>
       </QueryClientProvider>
