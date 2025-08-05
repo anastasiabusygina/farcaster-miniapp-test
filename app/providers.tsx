@@ -4,29 +4,27 @@ import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
 import { type AppConfig } from '@coinbase/onchainkit'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
-import { http, type Hex } from "viem";
+import { http } from "viem";
 import { WagmiProvider, createConfig } from "wagmi";
-import { base } from "wagmi/chains";
-import { BetSwirlSDKProvider, type TokenWithImage, TokenProvider, BalanceProvider } from "@betswirl/ui-react";
-import { polygon } from "viem/chains";
+import { base, arbitrum, avalanche, polygon } from "wagmi/chains";
+import { BetSwirlSDKProvider, TokenProvider, BalanceProvider } from "@betswirl/ui-react";
 
-const DEGEN_TOKEN: TokenWithImage = {
-  address: "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed" as Hex,
-  symbol: "DEGEN",
-  decimals: 18,
-  image: "https://www.betswirl.com/img/tokens/DEGEN.svg",
+const CHAINS = [base, polygon, arbitrum, avalanche] as const;
+const SUPPORTED_CHAIN_IDS = CHAINS.map((chain) => chain.id);
+
+// Optional: You can set custom RPC URLs in the .env file.
+// If not provided, default public RPC URLs from wagmi will be used.
+const TRANSPORTS = {
+  [base.id]: http(process.env.NEXT_PUBLIC_BASE_RPC_URL || undefined),
+  [polygon.id]: http(process.env.NEXT_PUBLIC_POLYGON_RPC_URL || undefined),
+  [arbitrum.id]: http(process.env.NEXT_PUBLIC_ARBITRUM_RPC_URL || undefined),
+  [avalanche.id]: http(process.env.NEXT_PUBLIC_AVALANCHE_RPC_URL || undefined),
 };
 
-const baseRpcUrl = "https://mainnet.base.org"
-const polygonRpcUrl = "https://polygon-rpc.com"
-
 const config = createConfig({
-  chains: [base, polygon],
-  transports: {
-    [base.id]: http(baseRpcUrl),
-    [polygon.id]: http(polygonRpcUrl),
-  },
-  ssr: false,
+  chains: CHAINS,
+  transports: TRANSPORTS,
+  ssr: true,
 });
 
 const onChainKitConfig: AppConfig = {
@@ -47,9 +45,8 @@ export function Providers(props: { children: ReactNode }) {
           config={onChainKitConfig}
         >
           <BetSwirlSDKProvider 
-            initialChainId={base.id} 
-            bankrollToken={DEGEN_TOKEN} 
-            supportedChains={[base.id, polygon.id]}
+            initialChainId={base.id}
+            supportedChains={SUPPORTED_CHAIN_IDS}
           >
             <TokenProvider>
               <BalanceProvider>
