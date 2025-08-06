@@ -1,7 +1,7 @@
 # BetSwirl Farcaster Mini App Demo
 This project is the result of following the integration guide: [Farcaster Mini App Integration Guide](https://github.com/BetSwirl/sdk/blob/main/packages/ui-react/docs/farcaster-miniapp-guide.md)
 
-Mini App Demo: https://miniapp-ui-react-demo.vercel.app
+Mini App Demo: 
 
 ---
 
