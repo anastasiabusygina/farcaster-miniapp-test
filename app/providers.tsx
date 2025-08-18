@@ -1,26 +1,29 @@
 "use client";
 
-import { BetSwirlSDKProvider, type TokenWithImage } from "@betswirl/ui-react";
-import { type AppConfig } from "@coinbase/onchainkit";
 import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
+import { type AppConfig } from '@coinbase/onchainkit'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
-import { type Hex, http } from "viem";
-import { createConfig, WagmiProvider } from "wagmi";
-import { base } from "wagmi/chains";
+import { http } from "viem";
+import { WagmiProvider, createConfig } from "wagmi";
+import { base, arbitrum, avalanche, polygon } from "wagmi/chains";
+import { BetSwirlSDKProvider, TokenProvider, BalanceProvider } from "@betswirl/ui-react";
 
-const DEGEN_TOKEN: TokenWithImage = {
-  address: "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed" as Hex,
-  symbol: "DEGEN",
-  decimals: 18,
-  image: "https://www.betswirl.com/img/tokens/DEGEN.svg",
+const CHAINS = [base, polygon, arbitrum, avalanche] as const;
+const SUPPORTED_CHAIN_IDS = CHAINS.map((chain) => chain.id);
+
+// Optional: You can set custom RPC URLs in the .env file.
+// If not provided, default public RPC URLs from wagmi will be used.
+const TRANSPORTS = {
+  [base.id]: http(process.env.NEXT_PUBLIC_BASE_RPC_URL || undefined),
+  [polygon.id]: http(process.env.NEXT_PUBLIC_POLYGON_RPC_URL || undefined),
+  [arbitrum.id]: http(process.env.NEXT_PUBLIC_ARBITRUM_RPC_URL || undefined),
+  [avalanche.id]: http(process.env.NEXT_PUBLIC_AVALANCHE_RPC_URL || undefined),
 };
 
 const config = createConfig({
-  chains: [base],
-  transports: {
-    [base.id]: http(),
-  },
+  chains: CHAINS,
+  transports: TRANSPORTS,
   ssr: true,
 });
 
@@ -41,8 +44,15 @@ export function Providers(props: { children: ReactNode }) {
           chain={base}
           config={onChainKitConfig}
         >
-          <BetSwirlSDKProvider initialChainId={base.id} bankrollToken={DEGEN_TOKEN}>
-            {props.children}
+          <BetSwirlSDKProvider 
+            initialChainId={base.id}
+            supportedChains={SUPPORTED_CHAIN_IDS}
+          >
+            <TokenProvider>
+              <BalanceProvider>
+                {props.children}
+              </BalanceProvider>
+            </TokenProvider>
           </BetSwirlSDKProvider>
         </MiniKitProvider>
       </QueryClientProvider>

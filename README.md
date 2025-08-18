@@ -1,3 +1,10 @@
+# BetSwirl Farcaster Mini App Demo
+This project is the result of following the integration guide: [Farcaster Mini App Integration Guide](https://github.com/BetSwirl/sdk/blob/main/packages/ui-react/docs/farcaster-miniapp-guide.md)
+
+Mini App Demo: 
+
+---
+
 # MiniKit Template
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-onchain --mini`](), configured with:
@@ -6,10 +13,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-oncha
 - [OnchainKit](https://www.base.org/builders/onchainkit)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Next.js](https://nextjs.org/docs)
-
-## BetSwirl Integration
-
-For detailed instructions on integrating BetSwirl games into Farcaster frame, see [BetSwirl Farcaster Integration Guide](./docs/betswirl-farcaster-guide.md).
 
 ## Getting Started
 
