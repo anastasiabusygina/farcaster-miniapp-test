@@ -1,5 +1,5 @@
 # BetSwirl Farcaster Mini App Demo
-This project is the result of following the integration guide: [Farcaster Mini App Integration Guide](https://github.com/BetSwirl/sdk/blob/main/packages/ui-react/docs/farcaster-miniapp-guide.md)
+This project is the result of following the integration guide: [Farcaster Mini App Integration Guide](https://docs.betswirl.com/developer-hub/demos/ui-react/miniapp)
 
 Mini App Demo: 
 
@@ -11,7 +11,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-oncha
 
 - [MiniKit](https://docs.base.org/builderkits/minikit/overview)
 - [OnchainKit](https://www.base.org/builders/onchainkit)
-- [Tailwind CSS](https://tailwindcss.com)
+- [BetSwirl UI React](https://www.npmjs.com/package/@betswirl/ui-react)
 - [Next.js](https://nextjs.org/docs)
 
 ## Getting Started
@@ -34,8 +34,7 @@ You can regenerate the FARCASTER Account Association environment variables by ru
 The environment variables enable the following features:
 
 - Frame metadata - Sets up the Frame Embed that will be shown when you cast your frame
-- Account association - Allows users to add your frame to their account, enables notifications
-- Redis API keys - Enable Webhooks and background notifications for your application by storing users notification details
+- Account association - Allows users to add your frame to their account
 
 ```bash
 # Shared/OnchainKit variables
@@ -60,9 +59,14 @@ NEXT_PUBLIC_APP_OG_TITLE=
 NEXT_PUBLIC_APP_OG_DESCRIPTION=
 NEXT_PUBLIC_APP_OG_IMAGE=
 
-# Redis config
-REDIS_URL=
-REDIS_TOKEN=
+# Optional: BetSwirl affiliate address to earn 30% commission from bets
+NEXT_PUBLIC_AFFILIATE_ADDRESS=
+
+# Optional: Custom RPC endpoints for better performance
+NEXT_PUBLIC_BASE_RPC_URL=
+NEXT_PUBLIC_POLYGON_RPC_URL=
+NEXT_PUBLIC_ARBITRUM_RPC_URL=
+NEXT_PUBLIC_AVALANCHE_RPC_URL=
 ```
 
 3. Start the development server:
@@ -76,18 +80,20 @@ npm run dev
 - `.well-known/farcaster.json` endpoint configured for Frame metadata and account association
 - Frame metadata automatically added to page headers in `layout.tsx`
 
-### Background Notifications
-- Redis-backed notification system using Upstash
-- Ready-to-use notification endpoints in `api/notify` and `api/webhook`
-- Notification client utilities in `lib/notification-client.ts`
+### BetSwirl Integration
+- Multiple casino games (Dice, Coin Toss, Roulette) with navigation
+- Multi-chain support (Base, Polygon, Arbitrum, Avalanche)
+- Leaderboard support with "Play Now" functionality
+- Freebet system for user promotions
+- Token selection and balance management
 
 ### Theming
-- Custom theme defined in `theme.css` with OnchainKit variables
-- Pixel font integration with Pixelify Sans
-- Dark/light mode support through OnchainKit
+- Custom theme via `gameProps` in `page.tsx`
+- Background images for page and game components
+- Dark theme with golden accents
 
 ### MiniKit Provider
-The app is wrapped with `MiniKitProvider` in `providers.tsx`, configured with:
+The app is wrapped with `MiniKitProvider` in `rootProvider.tsx`, configured with:
 - OnchainKit integration
 - Access to Frames context
 - Sets up Wagmi Connectors
@@ -104,8 +110,8 @@ To get started building your own frame, follow these steps:
 
 2. Start building your Frame:
    - Modify `page.tsx` to create your Frame UI
-   - Update theme variables in `theme.css`
-   - Adjust MiniKit configuration in `providers.tsx`
+   - Update theme variables in `gameProps`
+   - Adjust MiniKit configuration in `rootProvider.tsx`
 
 3. Add your frame to your account:
    - Cast your frame to see it in action
@@ -116,4 +122,4 @@ To get started building your own frame, follow these steps:
 - [MiniKit Documentation](https://docs.base.org/builderkits/minikit/overview)
 - [OnchainKit Documentation](https://docs.base.org/builderkits/onchainkit/getting-started)
 - [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [BetSwirl Documentation](https://docs.betswirl.com)
