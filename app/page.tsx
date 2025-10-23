@@ -7,7 +7,7 @@ import { DiceGame, CoinTossGame, RouletteGame } from "@betswirl/ui-react";
 import "@betswirl/ui-react/styles.css";
 
 export default function App() {
-  const { setFrameReady, isFrameReady, context } = useMiniKit();
+  const { setMiniAppReady, isMiniAppReady, context } = useMiniKit();
   const [frameAdded, setFrameAdded] = useState(false);
 
   const [game, setGame] = useState<'dice' | 'cointoss' | 'roulette'>('dice')
@@ -23,10 +23,10 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (!isFrameReady) {
-      setFrameReady();
+    if (!isMiniAppReady) {
+      setMiniAppReady();
     }
-  }, [setFrameReady, isFrameReady]);
+  }, [setMiniAppReady, isMiniAppReady]);
 
   const handleAddFrame = useCallback(async () => {
     const frameAdded = await addFrame();
