@@ -42,16 +42,8 @@ export function RootProvider(props: { children: ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <MiniKitProvider
-          chain={base}
-          config={{
-            appearance: {
-              mode: "auto",
-            },
-            wallet: {
-              display: "modal",
-              preference: "all",
-            },
-          }}
+          enabled={true}
+          autoConnect={true}
         >
           <BetSwirlSDKProvider
             initialChainId={base.id}
